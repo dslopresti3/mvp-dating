@@ -1,44 +1,52 @@
 import Link from "next/link";
 
+import { ChipList } from "@/components/ChipList";
 import { PageHeader } from "@/components/PageHeader";
 import { SectionCard } from "@/components/SectionCard";
-import { featuredEvents } from "@/lib/mock-data";
 
 export default function HomePage() {
-  const nextEvent = featuredEvents[0];
+  const eventTypes = ["MLB", "NHL", "NBA", "WNBA", "MLS", "PWHL"];
 
   return (
     <>
       <PageHeader
         badge="Stadium Date"
-        title="Pick an event, then find your people"
-        subtitle="Start with the game night. Matching comes second."
+        title="Pick the event first. Then meet someone to go with."
+        subtitle="Stadium Date is event-first: choose a live game in your city, then discover people who want to attend that same event."
       />
 
       <SectionCard
-        title="Tonight's featured event"
-        description={`${nextEvent.title} • ${nextEvent.venue}`}
-        href={`/events/${nextEvent.id}`}
-        ctaLabel="View event"
+        title="City"
+        description="Start in your city so every event and match feels relevant."
       >
-        <p className="text-sm text-zinc-700">{nextEvent.date}</p>
+        <label className="space-y-2">
+          <span className="text-sm font-medium text-zinc-700">Choose city</span>
+          <select
+            defaultValue="new-york-city"
+            className="w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-medium text-zinc-900 shadow-sm"
+          >
+            <option value="new-york-city">New York City</option>
+          </select>
+        </label>
       </SectionCard>
 
       <SectionCard
-        title="Quick actions"
-        description="Jump into your core flows while we build out the full experience."
+        title="Event types"
+        description="Pick a league to quickly tune your event feed."
       >
-        <div className="flex flex-wrap gap-2">
-          <Link href="/discover" className="rounded-full bg-zinc-100 px-4 py-2 text-sm">
-            Discover events
-          </Link>
-          <Link href="/matches" className="rounded-full bg-zinc-100 px-4 py-2 text-sm">
-            See matches
-          </Link>
-          <Link href="/profile" className="rounded-full bg-zinc-100 px-4 py-2 text-sm">
-            Edit profile
-          </Link>
-        </div>
+        <ChipList items={eventTypes} />
+      </SectionCard>
+
+      <SectionCard
+        title="Ready to find your night out?"
+        description="Go to the event feed and choose where your date starts."
+      >
+        <Link
+          href="/discover"
+          className="inline-flex w-full items-center justify-center rounded-2xl bg-zinc-900 px-5 py-3 text-sm font-semibold text-white"
+        >
+          Continue to Discover
+        </Link>
       </SectionCard>
     </>
   );
