@@ -1,11 +1,47 @@
-import { ChipList } from "@/components/ChipList";
+'use client';
+
+import { useMemo, useState } from "react";
+
 import { EventCard } from "@/components/EventCard";
+import { FilterChip } from "@/components/FilterChip";
 import { PageHeader } from "@/components/PageHeader";
 import { events } from "@/lib/mock-data";
+import type { Event } from "@/types";
 
-const discoverFilters = ["Tonight", "This week", "Under $50", "Hype", "Chill", "Unique", "Premium"];
+type DiscoverFilter = "Tonight" | "This week" | "Under $50" | "Hype" | "Chill" | "Unique" | "Premium";
+
+const discoverFilters: DiscoverFilter[] = ["Tonight", "This week", "Under $50", "Hype", "Chill", "Unique", "Premium"];
+
+const seedTonight = "2026-05-06";
+const seedWeekEnd = "2026-05-12";
+
+const filterPredicates: Record<DiscoverFilter, (event: Event) => boolean> = {
+  Tonight: (event) => event.date === seedTonight,
+  "This week": (event) => event.date >= seedTonight && event.date <= seedWeekEnd,
+  "Under $50": (event) => event.average_ticket_price < 50,
+  Hype: (event) => ["high-energy", "electric", "loud", "chant-heavy"].includes(event.vibe),
+  Chill: (event) => ["social", "upbeat", "community-forward"].includes(event.vibe),
+  Unique: (event) => event.league === "PWHL" || event.league === "WNBA",
+  Premium: (event) => event.average_ticket_price >= 120 || event.vibe === "premium",
+};
 
 export default function DiscoverPage() {
+  const [selectedFilters, setSelectedFilters] = useState<DiscoverFilter[]>([]);
+
+  const filteredEvents = useMemo(() => {
+    if (selectedFilters.length === 0) {
+      return events;
+    }
+
+    return events.filter((event) => selectedFilters.every((filter) => filterPredicates[filter](event)));
+  }, [selectedFilters]);
+
+  const toggleFilter = (filter: DiscoverFilter) => {
+    setSelectedFilters((current) =>
+      current.includes(filter) ? current.filter((value) => value !== filter) : [...current, filter],
+    );
+  };
+
   return (
     <>
       <PageHeader
@@ -13,12 +49,28 @@ export default function DiscoverPage() {
         subtitle="Find your event first, then meet someone who wants the same vibe."
       />
 
-      <ChipList items={discoverFilters} />
+      <ul className="flex flex-wrap gap-2" aria-label="Discover filters">
+        {discoverFilters.map((filter) => (
+          <li key={filter}>
+            <FilterChip
+              label={filter}
+              selected={selectedFilters.includes(filter)}
+              onClick={() => toggleFilter(filter)}
+            />
+          </li>
+        ))}
+      </ul>
 
       <section className="space-y-4 overflow-y-auto pb-2" aria-label="Event feed">
-        {events.map((event) => (
+        {filteredEvents.map((event) => (
           <EventCard key={event.id} event={event} />
         ))}
+
+        {filteredEvents.length === 0 ? (
+          <p className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 text-sm text-zinc-600">
+            No events match this combination yet. Try removing a filter.
+          </p>
+        ) : null}
       </section>
     </>
   );
