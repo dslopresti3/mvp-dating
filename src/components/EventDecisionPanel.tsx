@@ -5,13 +5,17 @@ import { useMemo, useState } from "react";
 
 import { FilterChip } from "@/components/FilterChip";
 import { IntentSelector } from "@/components/IntentSelector";
+import {
+  defaultSelectionState,
+  type DateStyleValue,
+  type IntentValue,
+  readSelectionState,
+  saveSelectionState,
+} from "@/lib/mvp-selection";
 
 type EventDecisionPanelProps = {
   eventId: string;
 };
-
-type IntentValue = "have_tickets" | "buy_tickets" | "exploring";
-type DateStyleValue = "one_on_one" | "group_hang" | "open_either";
 
 const intentOptions = [
   {
@@ -37,11 +41,23 @@ const dateStyleOptions = [
   { value: "open_either", label: "Open either" },
 ] as const;
 
+const getInitialSelection = (eventId: string) => {
+  const savedSelection = readSelectionState();
+
+  if (savedSelection.eventId === eventId) {
+    return { intent: savedSelection.intent, dateStyle: savedSelection.dateStyle };
+  }
+
+  return { intent: defaultSelectionState.intent, dateStyle: defaultSelectionState.dateStyle };
+};
+
 export function EventDecisionPanel({ eventId }: EventDecisionPanelProps) {
-  const [intent, setIntent] = useState<IntentValue>("buy_tickets");
-  const [dateStyle, setDateStyle] = useState<DateStyleValue>("one_on_one");
+  const [intent, setIntent] = useState<IntentValue>(() => getInitialSelection(eventId).intent);
+  const [dateStyle, setDateStyle] = useState<DateStyleValue>(() => getInitialSelection(eventId).dateStyle);
 
   const ctaHref = useMemo(() => {
+    saveSelectionState({ eventId, intent, dateStyle });
+
     const params = new URLSearchParams({
       eventId,
       intent,
