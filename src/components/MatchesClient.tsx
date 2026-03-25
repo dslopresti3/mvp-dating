@@ -1,29 +1,64 @@
 'use client';
 
-import Link from "next/link";
 import { useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 
+import { MatchCard } from "@/components/MatchCard";
 import { PageHeader } from "@/components/PageHeader";
-import { SectionCard } from "@/components/SectionCard";
 import {
   readSelectionState,
   saveSelectionState,
   type DateStyleValue,
   type IntentValue,
 } from "@/lib/mvp-selection";
-import { events, starterChats, starterMatches } from "@/lib/mock-data";
+import { events, profiles } from "@/lib/mock-data";
+import type { UserProfile } from "@/types";
 
-const intentLabels: Record<IntentValue, string> = {
-  have_tickets: "I already have tickets",
-  buy_tickets: "I'll buy tickets",
-  exploring: "Just exploring",
+const intentLabels: Record<UserProfile["intent"], string> = {
+  long_term: "Long-term",
+  relationship: "Relationship",
+  casual: "Casual",
+  new_friends: "New friends",
 };
 
-const dateStyleLabels: Record<DateStyleValue, string> = {
-  one_on_one: "1:1 date",
-  group_hang: "Group hang",
-  open_either: "Open either",
+const intentCompatibilityMap: Record<IntentValue, UserProfile["intent"][]> = {
+  have_tickets: ["relationship", "long_term"],
+  buy_tickets: ["relationship", "long_term", "casual"],
+  exploring: ["casual", "new_friends", "relationship"],
+};
+
+const dateStyleBoostVibes: Record<DateStyleValue, string[]> = {
+  one_on_one: ["premium", "electric", "intense"],
+  group_hang: ["social", "upbeat", "chant-heavy", "community-forward"],
+  open_either: [],
+};
+
+const getCompatibilityScore = (
+  profile: UserProfile,
+  selectedEventId: string,
+  selectedIntent: IntentValue,
+  selectedEventVibe: string,
+  selectedDateStyle: DateStyleValue,
+) => {
+  const sharesEvent = profile.interested_event_ids.includes(selectedEventId);
+
+  if (!sharesEvent) {
+    return -1;
+  }
+
+  const hasCompatibleIntent = intentCompatibilityMap[selectedIntent].includes(profile.intent);
+  const hasVibeAlignment = profile.preferred_vibe === selectedEventVibe;
+  const hasDateStyleAlignment =
+    dateStyleBoostVibes[selectedDateStyle].length > 0 &&
+    dateStyleBoostVibes[selectedDateStyle].includes(profile.preferred_vibe);
+
+  return (
+    100 +
+    (hasCompatibleIntent ? 20 : 0) +
+    (hasVibeAlignment ? 8 : 0) +
+    (hasDateStyleAlignment ? 4 : 0) +
+    Math.min(profile.ticket_budget / 100, 5)
+  );
 };
 
 export function MatchesClient() {
@@ -44,48 +79,61 @@ export function MatchesClient() {
   }, [selection]);
 
   const selectedEvent = events.find((event) => event.id === selection.eventId);
-  const selectedIntent = intentLabels[selection.intent];
-  const selectedDateStyle = dateStyleLabels[selection.dateStyle];
+
+  const compatibleMatches = useMemo(() => {
+    if (!selectedEvent) {
+      return [];
+    }
+
+    return profiles
+      .map((profile) => {
+        const score = getCompatibilityScore(
+          profile,
+          selectedEvent.id,
+          selection.intent,
+          selectedEvent.vibe,
+          selection.dateStyle,
+        );
+
+        return {
+          profile,
+          score,
+          vibeAligned: profile.preferred_vibe === selectedEvent.vibe,
+        };
+      })
+      .filter((entry) => entry.score >= 100)
+      .sort((a, b) => b.score - a.score);
+  }, [selectedEvent, selection.dateStyle, selection.intent]);
 
   return (
     <>
-      <PageHeader
-        title="Your matches"
-        subtitle="People who align with your event plans and energy."
-      />
+      <PageHeader title="Compatible for this event" subtitle={selectedEvent?.title ?? "Select an event first."} />
 
       {selectedEvent ? (
-        <SectionCard
-          title="Current matching context"
-          description={`${selectedEvent.title} • ${selectedEvent.venue}`}
-        >
-          <div className="space-y-1 text-sm text-zinc-700">
-            <p>Intent: {selectedIntent}</p>
-            <p>Date style: {selectedDateStyle}</p>
-          </div>
-        </SectionCard>
+        <p className="text-sm text-zinc-600">
+          Showing people who also picked <span className="font-semibold text-zinc-900">{selectedEvent.title}</span>.
+        </p>
       ) : null}
 
-      <div className="space-y-4">
-        {starterMatches.map((match) => {
-          const chat = starterChats.find((entry) => entry.matchId === match.id);
+      <section className="space-y-4" aria-label="Compatible matches list">
+        {compatibleMatches.map(({ profile, vibeAligned }) => (
+          <MatchCard
+            key={profile.id}
+            name={profile.first_name}
+            age={profile.age}
+            eventContext={`Also going to ${selectedEvent?.title} at ${selectedEvent?.venue}`}
+            bio={profile.bio}
+            intentLabel={intentLabels[profile.intent]}
+            vibeAligned={vibeAligned}
+          />
+        ))}
 
-          return (
-            <SectionCard key={match.id} title={match.name} description={match.vibe}>
-              {chat ? (
-                <Link
-                  href={`/chat/${chat.id}`}
-                  className="inline-flex rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white"
-                >
-                  Open chat
-                </Link>
-              ) : (
-                <p className="text-sm text-zinc-600">Chat will unlock after your first event check-in.</p>
-              )}
-            </SectionCard>
-          );
-        })}
-      </div>
+        {selectedEvent && compatibleMatches.length === 0 ? (
+          <p className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 text-sm text-zinc-600">
+            No compatible profiles yet for this event. Try changing your intent to see more options.
+          </p>
+        ) : null}
+      </section>
     </>
   );
 }
