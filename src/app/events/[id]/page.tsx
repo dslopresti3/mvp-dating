@@ -1,8 +1,22 @@
 import { notFound } from "next/navigation";
 
+import { ChipList } from "@/components/ChipList";
+import { EventDecisionPanel } from "@/components/EventDecisionPanel";
 import { PageHeader } from "@/components/PageHeader";
-import { SectionCard } from "@/components/SectionCard";
-import { featuredEvents, starterMatches } from "@/lib/mock-data";
+import { getEventById, getProfilesForEvent } from "@/lib/mock-data";
+
+const formatEventDate = (date: string) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+
+const formatVibe = (vibe: string) =>
+  vibe
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
 export default async function EventDetailPage({
   params,
@@ -10,44 +24,39 @@ export default async function EventDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const event = featuredEvents.find((entry) => entry.id === id);
+  const event = getEventById(id);
 
   if (!event) {
     notFound();
   }
 
-  const relatedMatches = starterMatches.filter((match) => match.eventId === event.id);
+  const interestedUsers = getProfilesForEvent(event.id).length;
 
   return (
     <>
       <PageHeader
         title={event.title}
-        subtitle={`${event.venue} • ${event.date}`}
+        subtitle={`${formatEventDate(event.date)} • ${event.time}`}
         badge={event.league}
       />
 
-      <SectionCard
-        title="Event overview"
-        description="Placeholder details for schedules, seat zones, and meetup options."
-      />
+      <section className="space-y-4 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
+        <div className="space-y-2">
+          <p className="text-sm text-zinc-600">{event.venue}</p>
+          <p className="text-sm text-zinc-600">
+            Avg ticket <span className="font-semibold text-zinc-900">${event.average_ticket_price}</span>
+          </p>
+          <p className="text-sm text-zinc-600">
+            <span className="font-semibold text-zinc-900">{interestedUsers}</span> people interested
+          </p>
+        </div>
 
-      <SectionCard
-        title="Potential matches"
-        description="Starter profiles attending this event."
-      >
-        <ul className="space-y-2">
-          {relatedMatches.length ? (
-            relatedMatches.map((match) => (
-              <li key={match.id} className="rounded-xl bg-zinc-100 p-3 text-sm text-zinc-700">
-                <p className="font-medium text-zinc-900">{match.name}</p>
-                <p>{match.vibe}</p>
-              </li>
-            ))
-          ) : (
-            <li className="text-sm text-zinc-600">No starter matches yet for this event.</li>
-          )}
-        </ul>
-      </SectionCard>
+        <ChipList items={[`Vibe: ${formatVibe(event.vibe)}`]} />
+
+        <p className="text-sm leading-relaxed text-zinc-700">{event.description}</p>
+      </section>
+
+      <EventDecisionPanel eventId={event.id} />
     </>
   );
 }
