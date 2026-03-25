@@ -1,27 +1,25 @@
+import { ChipList } from "@/components/ChipList";
+import { EventCard } from "@/components/EventCard";
 import { PageHeader } from "@/components/PageHeader";
-import { SectionCard } from "@/components/SectionCard";
-import { featuredEvents } from "@/lib/mock-data";
+import { events } from "@/lib/mock-data";
+
+const discoverFilters = ["Tonight", "This week", "Under $50", "Hype", "Chill", "Unique", "Premium"];
 
 export default function DiscoverPage() {
   return (
     <>
       <PageHeader
-        title="Discover events"
-        subtitle="Choose your event first, then meet compatible fans."
+        title="This Week in NYC"
+        subtitle="Find your event first, then meet someone who wants the same vibe."
       />
-      <div className="space-y-4">
-        {featuredEvents.map((event) => (
-          <SectionCard
-            key={event.id}
-            title={event.title}
-            description={`${event.league} • ${event.venue}`}
-            href={`/events/${event.id}`}
-            ctaLabel="See details"
-          >
-            <p className="text-sm text-zinc-700">{event.date}</p>
-          </SectionCard>
+
+      <ChipList items={discoverFilters} />
+
+      <section className="space-y-4 overflow-y-auto pb-2" aria-label="Event feed">
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} />
         ))}
-      </div>
+      </section>
     </>
   );
 }
