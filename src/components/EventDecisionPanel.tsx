@@ -68,7 +68,7 @@ export function EventDecisionPanel({ eventId }: EventDecisionPanelProps) {
   }, [dateStyle, eventId, intent]);
 
   return (
-    <div className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm">
+    <div className="app-card space-y-5">
       <IntentSelector
         title="Your plan for tickets"
         options={intentOptions.map((option) => ({ ...option }))}
@@ -77,7 +77,7 @@ export function EventDecisionPanel({ eventId }: EventDecisionPanelProps) {
       />
 
       <section className="space-y-3" aria-label="Date style">
-        <h2 className="text-sm font-semibold tracking-wide text-zinc-800">Date style</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-800">Date style</h2>
         <ul className="flex flex-wrap gap-2">
           {dateStyleOptions.map((option) => (
             <li key={option.value}>
@@ -93,7 +93,7 @@ export function EventDecisionPanel({ eventId }: EventDecisionPanelProps) {
 
       <Link
         href={ctaHref}
-        className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-zinc-900 px-4 py-3 text-sm font-semibold text-white"
+        className="app-button-primary w-full"
       >
         See compatible people
       </Link>

@@ -40,13 +40,13 @@ export default async function EventDetailPage({
         badge={event.league}
       />
 
-      <section className="space-y-4 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
+      <section className="app-card app-section">
         <div className="space-y-2">
-          <p className="text-sm text-zinc-600">{event.venue}</p>
-          <p className="text-sm text-zinc-600">
+          <p className="text-[15px] text-zinc-600">{event.venue}</p>
+          <p className="text-[15px] text-zinc-600">
             Avg ticket <span className="font-semibold text-zinc-900">${event.average_ticket_price}</span>
           </p>
-          <p className="text-sm text-zinc-600">
+          <p className="text-[15px] text-zinc-600">
             <span className="font-semibold text-zinc-900">{interestedUsers}</span> people interested
           </p>
         </div>

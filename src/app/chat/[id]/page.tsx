@@ -38,7 +38,7 @@ export default async function ChatPage({
         title="Conversation preview"
         description="A simple placeholder for the eventual real-time chat UI."
       >
-        <p className="rounded-xl bg-zinc-100 p-3 text-sm leading-6 text-zinc-700">{chat.teaser}</p>
+        <p className="rounded-2xl bg-zinc-100 p-4 text-sm leading-6 text-zinc-700">{chat.teaser}</p>
       </SectionCard>
     </>
   );

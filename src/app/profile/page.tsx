@@ -35,7 +35,7 @@ export default function ProfilePage() {
         subtitle="A lightweight profile built around real plans: teams, timing, and budget."
       />
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
+      <section className="app-card">
         <div className="flex items-center gap-4">
           <div
             className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-zinc-100 text-xl font-semibold text-zinc-700"
@@ -97,7 +97,7 @@ export default function ProfilePage() {
       >
         <ul className="space-y-3">
           {interestedEvents.map((event) => (
-            <li key={event.id} className="rounded-xl border border-zinc-200 bg-zinc-50 p-3">
+            <li key={event.id} className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5">
               <p className="text-sm font-semibold text-zinc-900">{event.title}</p>
               <p className="text-xs text-zinc-600">
                 {formatEventDate(event.date)} • {event.time} • {event.venue}

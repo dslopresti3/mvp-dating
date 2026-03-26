@@ -128,10 +128,13 @@ export function MatchesClient() {
 
   return (
     <>
-      <PageHeader title="Compatible for this event" subtitle={selectedEvent?.title ?? "Choose an event to unlock matches."} />
+      <PageHeader
+        title="Compatible for this event"
+        subtitle={selectedEvent?.title ?? "Choose an event to unlock matches."}
+      />
 
       {selectedEvent ? (
-        <p className="text-sm leading-6 text-zinc-600">
+        <p className="text-[15px] leading-6 text-zinc-600">
           Showing people who also picked <span className="font-semibold text-zinc-900">{selectedEvent.title}</span>.
         </p>
       ) : (

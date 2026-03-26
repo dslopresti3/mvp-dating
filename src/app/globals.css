@@ -24,3 +24,21 @@ body {
   color: var(--foreground);
   line-height: 1.4;
 }
+
+@layer components {
+  .app-card {
+    @apply rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm;
+  }
+
+  .app-section {
+    @apply space-y-4;
+  }
+
+  .app-button-primary {
+    @apply inline-flex min-h-11 items-center justify-center rounded-full bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800;
+  }
+
+  .app-button-secondary {
+    @apply inline-flex min-h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50;
+  }
+}

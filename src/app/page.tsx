@@ -41,10 +41,7 @@ export default function HomePage() {
         title="Ready to find your night out?"
         description="Go to the event feed and choose where your date starts."
       >
-        <Link
-          href="/discover"
-          className="inline-flex w-full items-center justify-center rounded-2xl bg-zinc-900 px-5 py-3 text-sm font-semibold text-white"
-        >
+        <Link href="/discover" className="app-button-primary w-full rounded-2xl">
           Continue to Discover
         </Link>
       </SectionCard>
