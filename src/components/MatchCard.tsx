@@ -1,15 +1,30 @@
 'use client';
 
 type MatchCardProps = {
+  profileId: string;
   name: string;
   age: number;
   bio: string;
   eventContext: string;
   intentLabel: string;
   vibeAligned: boolean;
+  canMatch: boolean;
+  isMatching: boolean;
+  onMatch: (profileId: string) => void;
 };
 
-export function MatchCard({ name, age, bio, eventContext, intentLabel, vibeAligned }: MatchCardProps) {
+export function MatchCard({
+  profileId,
+  name,
+  age,
+  bio,
+  eventContext,
+  intentLabel,
+  vibeAligned,
+  canMatch,
+  isMatching,
+  onMatch,
+}: MatchCardProps) {
   return (
     <article className="space-y-4 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
       <div className="flex items-start gap-3">
@@ -48,9 +63,11 @@ export function MatchCard({ name, age, bio, eventContext, intentLabel, vibeAlign
         </button>
         <button
           type="button"
-          className="rounded-full bg-zinc-900 px-3 py-2 text-xs font-semibold text-white"
+          className="rounded-full bg-zinc-900 px-3 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:bg-zinc-400"
+          disabled={!canMatch || isMatching}
+          onClick={() => onMatch(profileId)}
         >
-          Match
+          {isMatching ? "Opening chat..." : canMatch ? "Match" : "No chat yet"}
         </button>
         <button
           type="button"

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { MatchCard } from "@/components/MatchCard";
 import { PageHeader } from "@/components/PageHeader";
@@ -11,7 +11,7 @@ import {
   type DateStyleValue,
   type IntentValue,
 } from "@/lib/mvp-selection";
-import { events, profiles } from "@/lib/mock-data";
+import { events, profiles, starterChats } from "@/lib/mock-data";
 import type { UserProfile } from "@/types";
 
 const intentLabels: Record<UserProfile["intent"], string> = {
@@ -62,7 +62,9 @@ const getCompatibilityScore = (
 };
 
 export function MatchesClient() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const [matchingProfileId, setMatchingProfileId] = useState<string | null>(null);
 
   const selection = useMemo(() => {
     const savedSelection = readSelectionState();
@@ -79,6 +81,13 @@ export function MatchesClient() {
   }, [selection]);
 
   const selectedEvent = events.find((event) => event.id === selection.eventId);
+
+  const chatIdByMatchId = useMemo(() => {
+    return starterChats.reduce<Record<string, string>>((acc, chat) => {
+      acc[chat.matchId] = chat.id;
+      return acc;
+    }, {});
+  }, []);
 
   const compatibleMatches = useMemo(() => {
     if (!selectedEvent) {
@@ -105,6 +114,17 @@ export function MatchesClient() {
       .sort((a, b) => b.score - a.score);
   }, [selectedEvent, selection.dateStyle, selection.intent]);
 
+  const handleMatch = (profileId: string) => {
+    const targetChatId = chatIdByMatchId[profileId] ?? starterChats[0]?.id;
+
+    if (!targetChatId) {
+      return;
+    }
+
+    setMatchingProfileId(profileId);
+    router.push(`/chat/${targetChatId}`);
+  };
+
   return (
     <>
       <PageHeader title="Compatible for this event" subtitle={selectedEvent?.title ?? "Select an event first."} />
@@ -119,12 +139,16 @@ export function MatchesClient() {
         {compatibleMatches.map(({ profile, vibeAligned }) => (
           <MatchCard
             key={profile.id}
+            profileId={profile.id}
             name={profile.first_name}
             age={profile.age}
             eventContext={`Also going to ${selectedEvent?.title} at ${selectedEvent?.venue}`}
             bio={profile.bio}
             intentLabel={intentLabels[profile.intent]}
             vibeAligned={vibeAligned}
+            canMatch={Boolean(chatIdByMatchId[profile.id] ?? starterChats[0]?.id)}
+            isMatching={matchingProfileId === profile.id}
+            onMatch={handleMatch}
           />
         ))}
 
