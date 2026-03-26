@@ -1,6 +1,7 @@
 import { ChatBubble } from "@/components/ChatBubble";
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
+import { formatEventDate } from "@/lib/formatting";
 import { getChatThreadById, getEventById, profiles, starterChats } from "@/lib/mock-data";
 
 const quickActionItems = [
@@ -84,7 +85,9 @@ export default async function ChatPage({
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Date plan</p>
           <h2 className="mt-2 text-lg font-semibold text-zinc-900">{event?.title ?? "Upcoming event"}</h2>
           <p className="mt-1 text-sm text-zinc-600">
-            {event ? `${event.date} • ${event.time} • ${event.venue}` : "Event details unavailable"}
+            {event
+              ? `${formatEventDate(event.date)} • ${event.time} • ${event.venue}`
+              : "Event details unavailable"}
           </p>
         </div>
 

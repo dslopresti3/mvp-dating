@@ -1,6 +1,7 @@
 'use client';
 
 import { AvatarPlaceholder } from "@/components/AvatarPlaceholder";
+import { formatEventDate } from "@/lib/formatting";
 
 type MatchCardProps = {
   profileId: string;
@@ -18,13 +19,6 @@ type MatchCardProps = {
   isMatching: boolean;
   onMatch: (profileId: string) => void;
 };
-
-const formatEventDate = (date: string) =>
-  new Date(`${date}T00:00:00`).toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-  });
 
 export function MatchCard({
   profileId,

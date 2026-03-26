@@ -13,8 +13,21 @@ type DiscoverFilter = "Tonight" | "This week" | "Under $50" | "Hype" | "Chill" |
 
 const discoverFilters: DiscoverFilter[] = ["Tonight", "This week", "Under $50", "Hype", "Chill", "Unique", "Premium"];
 
-const seedTonight = "2026-05-06";
-const seedWeekEnd = "2026-05-12";
+const sortedEventDates = events
+  .map((event) => event.date)
+  .sort((left, right) => left.localeCompare(right));
+
+const seedTonight = sortedEventDates[0] ?? "";
+
+const seedWeekEnd = (() => {
+  if (!seedTonight) {
+    return "";
+  }
+
+  const lastDay = new Date(`${seedTonight}T00:00:00`);
+  lastDay.setDate(lastDay.getDate() + 6);
+  return lastDay.toISOString().slice(0, 10);
+})();
 
 const filterPredicates: Record<DiscoverFilter, (event: Event) => boolean> = {
   Tonight: (event) => event.date === seedTonight,
@@ -60,6 +73,17 @@ export default function DiscoverPage() {
             />
           </li>
         ))}
+        {selectedFilters.length > 0 ? (
+          <li>
+            <button
+              type="button"
+              onClick={() => setSelectedFilters([])}
+              className="app-button-secondary-muted px-4"
+            >
+              Clear filters
+            </button>
+          </li>
+        ) : null}
       </ul>
 
       <section className="space-y-5 pb-2" aria-label="Event feed">

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import type { Event } from "@/types";
 import { EventThumbnail } from "@/components/EventThumbnail";
+import { formatEventDate, formatKebabLabel } from "@/lib/formatting";
 
 type EventCardProps = {
   event: Event;
@@ -12,19 +13,6 @@ type EventMetaPillProps = {
   value: string;
   valueClassName?: string;
 };
-
-const formatEventDate = (date: string) =>
-  new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  });
-
-const formatVibe = (vibe: string) =>
-  vibe
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
 
 function EventMetaPill({ label, value, valueClassName }: EventMetaPillProps) {
   return (
@@ -46,7 +34,7 @@ export function EventCard({ event }: EventCardProps) {
           <h2 className="text-xl font-semibold leading-tight tracking-tight text-zinc-900">{event.title}</h2>
         </div>
         <span className="inline-flex shrink-0 rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
-          {formatVibe(event.vibe)}
+          {formatKebabLabel(event.vibe)}
         </span>
       </div>
 
@@ -63,7 +51,7 @@ export function EventCard({ event }: EventCardProps) {
 
       <div className="flex flex-col gap-3">
         <p className="text-sm font-medium text-zinc-600">
-          Vibe <span className="font-semibold text-zinc-900">{formatVibe(event.vibe)}</span>
+          Vibe <span className="font-semibold text-zinc-900">{formatKebabLabel(event.vibe)}</span>
         </p>
         <Link href={`/events/${event.id}`} className="app-button-primary w-full">
           View details

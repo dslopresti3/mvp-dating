@@ -1,15 +1,11 @@
+import { formatKebabLabel } from "@/lib/formatting";
+
 type EventQuickFactsProps = {
   ticketPrice: number;
   vibe: string;
   venue: string;
   area: string;
 };
-
-const formatVibe = (vibe: string) =>
-  vibe
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
 
 type FactCardProps = {
   label: string;
@@ -48,7 +44,7 @@ export function EventQuickFacts({ ticketPrice, vibe, venue, area }: EventQuickFa
         helper="Per seat right now"
         emphasized
       />
-      <FactCard label="Vibe" value={formatVibe(vibe)} helper="Crowd energy" />
+      <FactCard label="Vibe" value={formatKebabLabel(vibe)} helper="Crowd energy" />
       <FactCard label="Venue" value={venue} helper={area} />
     </section>
   );
