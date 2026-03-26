@@ -169,6 +169,7 @@ export function MatchesClient() {
           description="Your saved event link looks outdated. Pick another event to refresh your compatible list."
           actionHref="/discover"
           actionLabel="Pick an event"
+          icon="🗓️"
         />
       ) : (
         <EmptyState
@@ -176,6 +177,7 @@ export function MatchesClient() {
           description="Pick an event first, then we can show compatible people headed to that same night out."
           actionHref="/discover"
           actionLabel="Browse events"
+          icon="🎟️"
         />
       )}
 
@@ -223,6 +225,7 @@ export function MatchesClient() {
               description="Try another event or adjust your date intent to open up more potential matches."
               actionHref="/discover"
               actionLabel="Pick another event"
+              icon="🤝"
             />
           ) : null}
         </section>

@@ -71,6 +71,7 @@ export default function DiscoverPage() {
           <EmptyState
             title="No events match these filters"
             description="Try removing one filter to reveal more event options for this week."
+            icon="🔎"
           />
         ) : null}
       </section>

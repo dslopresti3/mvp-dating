@@ -1,5 +1,7 @@
 'use client';
 
+import { AvatarPlaceholder } from "@/components/AvatarPlaceholder";
+
 type MatchCardProps = {
   profileId: string;
   name: string;
@@ -42,7 +44,7 @@ export function MatchCard({
 }: MatchCardProps) {
   return (
     <article className="app-card space-y-5">
-      <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5">
+      <div className="app-surface">
         <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">Event match</p>
         <p className="mt-1 text-[15px] font-semibold text-zinc-900">{eventTitle}</p>
         <p className="mt-1 text-sm text-zinc-600">
@@ -52,12 +54,7 @@ export function MatchCard({
       </div>
 
       <div className="flex items-start gap-3.5">
-        <div
-          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-lg font-semibold text-zinc-700"
-          aria-hidden
-        >
-          {name.slice(0, 1)}
-        </div>
+        <AvatarPlaceholder name={name} />
         <div className="min-w-0 space-y-2">
           <h2 className="text-xl font-semibold tracking-tight text-zinc-900">
             {name}, {age}

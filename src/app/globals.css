@@ -34,6 +34,11 @@ body {
     @apply space-y-4;
   }
 
+
+  .app-surface {
+    @apply rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5;
+  }
+
   .app-button-primary {
     @apply inline-flex min-h-11 items-center justify-center rounded-full bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800;
   }
