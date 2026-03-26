@@ -1,6 +1,7 @@
 import { AvatarPlaceholder } from "@/components/AvatarPlaceholder";
 import { PageHeader } from "@/components/PageHeader";
 import { ProfilePreferenceBlock } from "@/components/ProfilePreferenceBlock";
+import { formatEventDate, formatSnakeLabel } from "@/lib/formatting";
 import { events, profiles } from "@/lib/mock-data";
 import {
   profileDatePreferences,
@@ -8,21 +9,6 @@ import {
 } from "@/lib/profile-preferences";
 
 const selectedProfile = profiles[0];
-
-function formatIntentLabel(intent: string) {
-  return intent
-    .split("_")
-    .map((value) => value.charAt(0).toUpperCase() + value.slice(1))
-    .join(" ");
-}
-
-function formatEventDate(date: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  }).format(new Date(`${date}T00:00:00`));
-}
 
 export default function ProfilePage() {
   const interestedEvents = selectedProfile.interested_event_ids
@@ -58,7 +44,7 @@ export default function ProfilePage() {
                 {selectedProfile.age} years old
               </span>
               <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1">
-                {formatIntentLabel(selectedProfile.intent)}
+                {formatSnakeLabel(selectedProfile.intent)}
               </span>
             </div>
           </div>

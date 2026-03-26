@@ -3,14 +3,8 @@ import { notFound } from "next/navigation";
 import { EventDecisionPanel } from "@/components/EventDecisionPanel";
 import { EventQuickFacts } from "@/components/EventQuickFacts";
 import { PageHeader } from "@/components/PageHeader";
+import { formatEventDateLong } from "@/lib/formatting";
 import { getEventById, getProfilesForEvent } from "@/lib/mock-data";
-
-const formatEventDate = (date: string) =>
-  new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
 
 export default async function EventDetailPage({
   params,
@@ -30,7 +24,7 @@ export default async function EventDetailPage({
     <>
       <PageHeader
         title={event.title}
-        subtitle={`${formatEventDate(event.date)} • ${event.time}`}
+        subtitle={`${formatEventDateLong(event.date)} • ${event.time}`}
         badge={event.league}
       />
 
