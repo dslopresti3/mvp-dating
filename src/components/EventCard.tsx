@@ -6,6 +6,12 @@ type EventCardProps = {
   event: Event;
 };
 
+type EventMetaPillProps = {
+  label: string;
+  value: string;
+  valueClassName?: string;
+};
+
 const formatEventDate = (date: string) =>
   new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
     weekday: "short",
@@ -19,29 +25,42 @@ const formatVibe = (vibe: string) =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
+function EventMetaPill({ label, value, valueClassName }: EventMetaPillProps) {
+  return (
+    <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-3 py-2.5">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">{label}</p>
+      <p className={`mt-1 text-[15px] font-medium text-zinc-900 ${valueClassName ?? ""}`}>{value}</p>
+    </div>
+  );
+}
+
 export function EventCard({ event }: EventCardProps) {
   return (
-    <article className="app-card app-section">
+    <article className="app-card space-y-5">
       <div className="flex items-start justify-between gap-3">
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">{event.league}</p>
-          <h2 className="text-xl font-semibold tracking-tight text-zinc-900">{event.title}</h2>
+          <h2 className="text-xl font-semibold leading-tight tracking-tight text-zinc-900">{event.title}</h2>
         </div>
-        <span className="rounded-full bg-zinc-900 px-3 py-1.5 text-[11px] font-semibold text-white">
+        <span className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[11px] font-semibold text-zinc-700">
           {formatVibe(event.vibe)}
         </span>
       </div>
 
-      <div className="space-y-1.5 text-[15px] text-zinc-600">
-        <p className="font-medium text-zinc-800">
-          {formatEventDate(event.date)} • {event.time}
-        </p>
-        <p>{event.venue}</p>
+      <div className="grid grid-cols-2 gap-2.5">
+        <EventMetaPill label="Date" value={formatEventDate(event.date)} />
+        <EventMetaPill label="Time" value={event.time} />
+        <EventMetaPill label="Venue" value={event.venue} />
+        <EventMetaPill
+          label="Avg ticket"
+          value={`$${event.average_ticket_price}`}
+          valueClassName="text-base font-semibold"
+        />
       </div>
 
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-zinc-600">
-          Avg ticket <span className="text-base font-semibold text-zinc-900">${event.average_ticket_price}</span>
+        <p className="text-sm font-medium text-zinc-600">
+          Vibe <span className="font-semibold text-zinc-900">{formatVibe(event.vibe)}</span>
         </p>
         <Link
           href={`/events/${event.id}`}
