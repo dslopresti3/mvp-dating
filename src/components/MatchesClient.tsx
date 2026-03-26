@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { EmptyState } from "@/components/EmptyState";
 import { MatchCard } from "@/components/MatchCard";
 import { PageHeader } from "@/components/PageHeader";
 import {
@@ -127,37 +128,49 @@ export function MatchesClient() {
 
   return (
     <>
-      <PageHeader title="Compatible for this event" subtitle={selectedEvent?.title ?? "Select an event first."} />
+      <PageHeader title="Compatible for this event" subtitle={selectedEvent?.title ?? "Choose an event to unlock matches."} />
 
       {selectedEvent ? (
-        <p className="text-sm text-zinc-600">
+        <p className="text-sm leading-6 text-zinc-600">
           Showing people who also picked <span className="font-semibold text-zinc-900">{selectedEvent.title}</span>.
         </p>
+      ) : (
+        <EmptyState
+          title="No selected event yet"
+          description="Pick an event first, then we can show compatible people headed to that same night out."
+          actionHref="/discover"
+          actionLabel="Browse events"
+        />
+      )}
+
+      {selectedEvent ? (
+        <section className="space-y-4" aria-label="Compatible matches list">
+          {compatibleMatches.map(({ profile, vibeAligned }) => (
+            <MatchCard
+              key={profile.id}
+              profileId={profile.id}
+              name={profile.first_name}
+              age={profile.age}
+              eventContext={`Also going to ${selectedEvent.title} at ${selectedEvent.venue}`}
+              bio={profile.bio}
+              intentLabel={intentLabels[profile.intent]}
+              vibeAligned={vibeAligned}
+              canMatch={Boolean(chatIdByMatchId[profile.id] ?? starterChats[0]?.id)}
+              isMatching={matchingProfileId === profile.id}
+              onMatch={handleMatch}
+            />
+          ))}
+
+          {compatibleMatches.length === 0 ? (
+            <EmptyState
+              title="No compatible profiles right now"
+              description="Try another event or adjust your date intent to open up more potential matches."
+              actionHref="/discover"
+              actionLabel="Pick another event"
+            />
+          ) : null}
+        </section>
       ) : null}
-
-      <section className="space-y-4" aria-label="Compatible matches list">
-        {compatibleMatches.map(({ profile, vibeAligned }) => (
-          <MatchCard
-            key={profile.id}
-            profileId={profile.id}
-            name={profile.first_name}
-            age={profile.age}
-            eventContext={`Also going to ${selectedEvent?.title} at ${selectedEvent?.venue}`}
-            bio={profile.bio}
-            intentLabel={intentLabels[profile.intent]}
-            vibeAligned={vibeAligned}
-            canMatch={Boolean(chatIdByMatchId[profile.id] ?? starterChats[0]?.id)}
-            isMatching={matchingProfileId === profile.id}
-            onMatch={handleMatch}
-          />
-        ))}
-
-        {selectedEvent && compatibleMatches.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 text-sm text-zinc-600">
-            No compatible profiles yet for this event. Try changing your intent to see more options.
-          </p>
-        ) : null}
-      </section>
     </>
   );
 }

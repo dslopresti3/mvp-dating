@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full bg-zinc-50 font-sans text-zinc-900">
-        <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 px-4 pb-28 pt-6">
+        <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 px-4 pb-32 pt-5">
           {children}
         </main>
         <BottomNav />
