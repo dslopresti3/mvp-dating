@@ -22,7 +22,7 @@ const isDateStyleValue = (value: string): value is DateStyleValue =>
   value === "one_on_one" || value === "group_hang" || value === "open_either";
 
 const normalizeSelection = (selection: Partial<MvpSelectionState>): MvpSelectionState => ({
-  eventId: selection.eventId ?? defaultSelectionState.eventId,
+  eventId: typeof selection.eventId === "string" ? selection.eventId : defaultSelectionState.eventId,
   intent: selection.intent && isIntentValue(selection.intent) ? selection.intent : defaultSelectionState.intent,
   dateStyle:
     selection.dateStyle && isDateStyleValue(selection.dateStyle)
@@ -30,19 +30,44 @@ const normalizeSelection = (selection: Partial<MvpSelectionState>): MvpSelection
       : defaultSelectionState.dateStyle,
 });
 
-export const readSelectionState = (): MvpSelectionState => {
+const readStorageValue = () => {
   if (typeof window === "undefined") {
-    return defaultSelectionState;
+    return null;
   }
 
-  const rawValue = window.localStorage.getItem(STORAGE_KEY);
+  try {
+    return window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const writeStorageValue = (value: string) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(STORAGE_KEY, value);
+  } catch {
+    // localStorage can fail in private mode or when storage is blocked.
+  }
+};
+
+export const readSelectionState = (): MvpSelectionState => {
+  const rawValue = readStorageValue();
 
   if (!rawValue) {
     return defaultSelectionState;
   }
 
   try {
-    const parsed = JSON.parse(rawValue) as Partial<MvpSelectionState>;
+    const parsed = JSON.parse(rawValue) as unknown;
+
+    if (!parsed || typeof parsed !== "object") {
+      return defaultSelectionState;
+    }
+
     return normalizeSelection(parsed);
   } catch {
     return defaultSelectionState;
@@ -50,10 +75,6 @@ export const readSelectionState = (): MvpSelectionState => {
 };
 
 export const saveSelectionState = (selection: Partial<MvpSelectionState>) => {
-  if (typeof window === "undefined") {
-    return;
-  }
-
   const normalizedSelection = normalizeSelection(selection);
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedSelection));
+  writeStorageValue(JSON.stringify(normalizedSelection));
 };
