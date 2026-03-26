@@ -1,4 +1,5 @@
 import { AvatarPlaceholder } from "@/components/AvatarPlaceholder";
+import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { ProfilePreferenceBlock } from "@/components/ProfilePreferenceBlock";
 import { formatEventDate, formatSnakeLabel } from "@/lib/formatting";
@@ -11,6 +12,22 @@ import {
 const selectedProfile = profiles[0];
 
 export default function ProfilePage() {
+  if (!selectedProfile) {
+    return (
+      <>
+        <PageHeader
+          title="Profile"
+          subtitle="A lightweight profile built around real plans: teams, timing, and budget."
+        />
+        <EmptyState
+          title="Profile unavailable"
+          description="Profile data is temporarily unavailable. Please check back shortly."
+          icon="👤"
+        />
+      </>
+    );
+  }
+
   const interestedEvents = selectedProfile.interested_event_ids
     .map((eventId) => events.find((event) => event.id === eventId))
     .filter((event): event is (typeof events)[number] => Boolean(event));
