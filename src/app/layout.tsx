@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { BottomNav } from "@/components/BottomNav";
 
@@ -7,6 +7,20 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Stadium Date",
   description: "Event-first dating in New York, starting with live sports.",
+  applicationName: "Stadium Date",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Stadium Date",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#18181b",
 };
 
 export default function RootLayout({
