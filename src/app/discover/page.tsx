@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { EmptyState } from "@/components/EmptyState";
 import { EventCard } from "@/components/EventCard";
 import { FilterChip } from "@/components/FilterChip";
 import { PageHeader } from "@/components/PageHeader";
@@ -67,9 +68,10 @@ export default function DiscoverPage() {
         ))}
 
         {filteredEvents.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 text-sm text-zinc-600">
-            No events match this combination yet. Try removing a filter.
-          </p>
+          <EmptyState
+            title="No events match these filters"
+            description="Try removing one filter to reveal more event options for this week."
+          />
         ) : null}
       </section>
     </>
