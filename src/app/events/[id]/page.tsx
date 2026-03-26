@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { ChipList } from "@/components/ChipList";
 import { EventDecisionPanel } from "@/components/EventDecisionPanel";
+import { EventQuickFacts } from "@/components/EventQuickFacts";
 import { PageHeader } from "@/components/PageHeader";
 import { getEventById, getProfilesForEvent } from "@/lib/mock-data";
 
@@ -11,12 +11,6 @@ const formatEventDate = (date: string) =>
     month: "long",
     day: "numeric",
   });
-
-const formatVibe = (vibe: string) =>
-  vibe
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
 
 export default async function EventDetailPage({
   params,
@@ -40,20 +34,31 @@ export default async function EventDetailPage({
         badge={event.league}
       />
 
-      <section className="app-card app-section">
-        <div className="space-y-2">
-          <p className="text-[15px] text-zinc-600">{event.venue}</p>
-          <p className="text-[15px] text-zinc-600">
-            Avg ticket <span className="font-semibold text-zinc-900">${event.average_ticket_price}</span>
-          </p>
-          <p className="text-[15px] text-zinc-600">
-            <span className="font-semibold text-zinc-900">{interestedUsers}</span> people interested
-          </p>
+      <section className="app-card space-y-4">
+        <EventQuickFacts
+          ticketPrice={event.average_ticket_price}
+          vibe={event.vibe}
+          venue={event.venue}
+          area={event.borough_or_area}
+        />
+
+        <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5">
+          <p className="text-[11px] uppercase tracking-[0.08em] text-zinc-500">Event snapshot</p>
+          <p className="mt-1 text-sm leading-relaxed text-zinc-700">{event.description}</p>
         </div>
 
-        <ChipList items={[`Vibe: ${formatVibe(event.vibe)}`]} />
+        <p className="text-sm text-zinc-700">
+          <span className="font-semibold text-zinc-900">{interestedUsers}</span> people are already interested
+          in this event.
+        </p>
+      </section>
 
-        <p className="text-sm leading-relaxed text-zinc-700">{event.description}</p>
+      <section className="app-card space-y-2.5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">Next step</p>
+        <h2 className="text-lg font-semibold tracking-tight text-zinc-900">Set your intent and date style</h2>
+        <p className="text-sm leading-relaxed text-zinc-600">
+          Pick the options below to instantly see the most compatible people for this game.
+        </p>
       </section>
 
       <EventDecisionPanel eventId={event.id} />

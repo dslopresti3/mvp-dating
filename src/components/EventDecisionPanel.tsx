@@ -68,7 +68,7 @@ export function EventDecisionPanel({ eventId }: EventDecisionPanelProps) {
   }, [dateStyle, eventId, intent]);
 
   return (
-    <div className="app-card space-y-5">
+    <div className="app-card space-y-6">
       <IntentSelector
         title="Your plan for tickets"
         options={intentOptions.map((option) => ({ ...option }))}
@@ -76,8 +76,11 @@ export function EventDecisionPanel({ eventId }: EventDecisionPanelProps) {
         onSelect={(value) => setIntent(value as IntentValue)}
       />
 
-      <section className="space-y-3" aria-label="Date style">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-800">Date style</h2>
+      <section className="space-y-3.5" aria-label="Date style">
+        <div className="space-y-1">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-800">Date style</h2>
+          <p className="text-sm text-zinc-600">What kind of plan feels right for this event?</p>
+        </div>
         <ul className="flex flex-wrap gap-2">
           {dateStyleOptions.map((option) => (
             <li key={option.value}>
@@ -93,10 +96,12 @@ export function EventDecisionPanel({ eventId }: EventDecisionPanelProps) {
 
       <Link
         href={ctaHref}
-        className="app-button-primary w-full"
+        className="app-button-primary h-13 w-full text-base shadow-[0_10px_22px_rgba(24,24,27,0.28)]"
       >
-        See compatible people
+        See compatible people →
       </Link>
+
+      <p className="text-center text-xs text-zinc-500">You can change these preferences later.</p>
     </div>
   );
 }
