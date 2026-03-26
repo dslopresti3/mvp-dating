@@ -4,7 +4,8 @@ import { EventDecisionPanel } from "@/components/EventDecisionPanel";
 import { EventQuickFacts } from "@/components/EventQuickFacts";
 import { PageHeader } from "@/components/PageHeader";
 import { formatEventDateLong } from "@/lib/formatting";
-import { getEventById, getProfilesForEvent } from "@/lib/mock-data";
+import { getEventById } from "@/lib/events";
+import { getProfilesForEvent } from "@/lib/mock-data";
 
 export default async function EventDetailPage({
   params,
@@ -12,7 +13,7 @@ export default async function EventDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const event = getEventById(id);
+  const event = await getEventById(id);
 
   if (!event) {
     notFound();
