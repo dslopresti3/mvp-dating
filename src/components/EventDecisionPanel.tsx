@@ -71,6 +71,7 @@ export function EventDecisionPanel({ eventId }: EventDecisionPanelProps) {
     <div className="app-card space-y-6">
       <IntentSelector
         title="Your plan for tickets"
+        description="Choose one so matching can prioritize the right people."
         options={intentOptions.map((option) => ({ ...option }))}
         selectedValue={intent}
         onSelect={(value) => setIntent(value as IntentValue)}
@@ -86,8 +87,8 @@ export function EventDecisionPanel({ eventId }: EventDecisionPanelProps) {
             <li key={option.value}>
               <FilterChip
                 label={option.label}
-                selected={dateStyle === option.value}
-                onClick={() => setDateStyle(option.value)}
+                isSelected={dateStyle === option.value}
+                onSelect={() => setDateStyle(option.value)}
               />
             </li>
           ))}

@@ -55,8 +55,8 @@ export default function DiscoverPage() {
           <li key={filter}>
             <FilterChip
               label={filter}
-              selected={selectedFilters.includes(filter)}
-              onClick={() => toggleFilter(filter)}
+              isSelected={selectedFilters.includes(filter)}
+              onSelect={() => toggleFilter(filter)}
             />
           </li>
         ))}

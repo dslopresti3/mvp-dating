@@ -1,4 +1,4 @@
-import { AvatarPlaceholder } from "@/components/AvatarPlaceholder";
+import { ChatBubble } from "@/components/ChatBubble";
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { getChatThreadById, getEventById, profiles, starterChats } from "@/lib/mock-data";
@@ -96,30 +96,13 @@ export default async function ChatPage({
             const isCounterpart = senderName === chat.name;
 
             return (
-              <div
+              <ChatBubble
                 key={message.id}
-                className={`flex items-end gap-2 ${isCounterpart ? "justify-start" : "justify-end"}`}
-              >
-                {isCounterpart ? <AvatarPlaceholder name={senderName} sizeClassName="h-9 w-9" textClassName="text-sm" /> : null}
-                <article
-                  className={`max-w-[82%] space-y-1 rounded-2xl p-3 ${
-                    isCounterpart
-                      ? "mr-auto bg-white text-zinc-900 shadow-sm"
-                      : "ml-auto bg-zinc-900 text-white"
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-3 text-[11px]">
-                    <span className={`font-medium ${isCounterpart ? "text-zinc-500" : "text-zinc-300"}`}>
-                      {senderName}
-                    </span>
-                    <time className={isCounterpart ? "text-zinc-400" : "text-zinc-300"}>
-                      {formatMessageTime(message.sent_at)}
-                    </time>
-                  </div>
-                  <p className="text-sm leading-6">{message.text}</p>
-                </article>
-                {!isCounterpart ? <AvatarPlaceholder name="You" sizeClassName="h-9 w-9" textClassName="text-sm" /> : null}
-              </div>
+                senderName={senderName}
+                sentAtLabel={formatMessageTime(message.sent_at)}
+                text={message.text}
+                isCounterpart={isCounterpart}
+              />
             );
           })}
         </div>
@@ -132,7 +115,7 @@ export default async function ChatPage({
               <button
                 key={action.label}
                 type="button"
-                className="rounded-2xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-left transition hover:border-zinc-300 hover:bg-zinc-100"
+                className="app-choice-card bg-zinc-50 px-3 py-2"
                 aria-label={`${action.label}. ${action.detail}`}
               >
                 <p className="text-sm font-medium text-zinc-900">{action.label}</p>
