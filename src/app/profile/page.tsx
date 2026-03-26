@@ -35,73 +35,129 @@ export default function ProfilePage() {
         subtitle="A lightweight profile built around real plans: teams, timing, and budget."
       />
 
-      <section className="app-card">
-        <div className="flex items-center gap-4">
+      <section className="app-card space-y-4">
+        <div className="flex items-start gap-4">
           <div
             className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-zinc-100 text-xl font-semibold text-zinc-700"
             aria-label="Profile image placeholder"
           >
             {selectedProfile.first_name.charAt(0)}
           </div>
-          <div className="space-y-1">
+
+          <div className="min-w-0 flex-1 space-y-2">
             <h2 className="text-xl font-semibold tracking-tight text-zinc-900">
-              {selectedProfile.first_name}, {selectedProfile.age}
+              {selectedProfile.first_name}
             </h2>
-            <p className="text-sm text-zinc-600">{selectedProfile.city}</p>
+
+            <div className="flex flex-wrap gap-2 text-xs font-medium text-zinc-700">
+              <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1">
+                {selectedProfile.city}
+              </span>
+              <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1">
+                {selectedProfile.age} years old
+              </span>
+              <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1">
+                {formatIntentLabel(selectedProfile.intent)}
+              </span>
+            </div>
           </div>
         </div>
+
+        <p className="text-sm leading-6 text-zinc-600">{selectedProfile.bio}</p>
       </section>
 
       <ProfilePreferenceBlock
         title="Favorite teams & leagues"
-        description="Signals that help match you with the right event crowd."
+        description="Sports context that helps pair you with the right event and crowd."
       >
-        <ul className="space-y-2 text-sm text-zinc-700">
-          <li>
-            <span className="font-medium text-zinc-900">Teams:</span>{" "}
-            {selectedProfile.favorite_teams.join(", ")}
-          </li>
-          <li>
-            <span className="font-medium text-zinc-900">Leagues:</span>{" "}
-            {profileFavoriteLeagues.join(", ")}
-          </li>
-        </ul>
+        <div className="space-y-3">
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              Teams
+            </p>
+            <ul className="flex flex-wrap gap-2">
+              {selectedProfile.favorite_teams.map((team) => (
+                <li
+                  key={team}
+                  className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-sm font-medium text-zinc-800"
+                >
+                  {team}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              Leagues
+            </p>
+            <ul className="flex flex-wrap gap-2">
+              {profileFavoriteLeagues.map((league) => (
+                <li
+                  key={league}
+                  className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700"
+                >
+                  {league}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </ProfilePreferenceBlock>
 
       <ProfilePreferenceBlock
-        title="Date preferences"
-        description="Planning style and relationship intent for event-first dates."
+        title="Date planning preferences"
+        description="Only the details that matter for choosing and committing to an event date."
       >
-        <ul className="space-y-2 text-sm text-zinc-700">
-          {profileDatePreferences.map((preference) => (
-            <li key={preference}>• {preference}</li>
-          ))}
-          <li>
-            • Looking for: <span className="font-medium">{formatIntentLabel(selectedProfile.intent)}</span>
-          </li>
-        </ul>
-      </ProfilePreferenceBlock>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <article className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              Ticket budget
+            </p>
+            <p className="mt-1 text-sm text-zinc-700">
+              Up to <span className="font-semibold text-zinc-900">${selectedProfile.ticket_budget}</span> per ticket
+            </p>
+          </article>
 
-      <ProfilePreferenceBlock
-        title="Ticket budget"
-        description="Set a clear per-ticket range so invites stay realistic."
-      >
-        <p className="text-sm text-zinc-700">
-          Up to <span className="font-semibold text-zinc-900">${selectedProfile.ticket_budget}</span> per ticket
-        </p>
+          <article className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              Preferred vibe
+            </p>
+            <p className="mt-1 text-sm font-medium capitalize text-zinc-900">{selectedProfile.preferred_vibe}</p>
+          </article>
+        </div>
+
+        <div className="rounded-2xl border border-zinc-200 p-3.5">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            Planning style
+          </p>
+          <ul className="space-y-1.5 text-sm text-zinc-700">
+            {profileDatePreferences.map((preference) => (
+              <li key={preference}>• {preference}</li>
+            ))}
+          </ul>
+        </div>
       </ProfilePreferenceBlock>
 
       <ProfilePreferenceBlock
         title="Upcoming interested events"
-        description="Events you would actively plan a date around."
+        description="Events you are most likely to plan a real date around next."
       >
         <ul className="space-y-3">
           {interestedEvents.map((event) => (
-            <li key={event.id} className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5">
-              <p className="text-sm font-semibold text-zinc-900">{event.title}</p>
-              <p className="text-xs text-zinc-600">
-                {formatEventDate(event.date)} • {event.time} • {event.venue}
-              </p>
+            <li key={event.id} className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-zinc-900">{event.title}</p>
+                  <p className="text-xs text-zinc-600">
+                    {formatEventDate(event.date)} • {event.time}
+                  </p>
+                  <p className="text-xs text-zinc-600">{event.venue}</p>
+                </div>
+                <span className="shrink-0 rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+                  {event.league}
+                </span>
+              </div>
             </li>
           ))}
         </ul>
