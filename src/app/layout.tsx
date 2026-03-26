@@ -4,10 +4,36 @@ import { BottomNav } from "@/components/BottomNav";
 
 import "./globals.css";
 
+const fallbackSiteUrl = "https://stadium-date.vercel.app";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.length > 0
+    ? process.env.NEXT_PUBLIC_SITE_URL
+    : fallbackSiteUrl;
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Stadium Date",
   description: "Event-first dating in New York, starting with live sports.",
   applicationName: "Stadium Date",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Stadium Date",
+    title: "Stadium Date",
+    description: "Event-first dating in New York, starting with live sports.",
+  },
+  twitter: {
+    card: "summary",
+    title: "Stadium Date",
+    description: "Event-first dating in New York, starting with live sports.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
