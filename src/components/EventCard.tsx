@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import type { Event } from "@/types";
+import { EventThumbnail } from "@/components/EventThumbnail";
 
 type EventCardProps = {
   event: Event;
@@ -37,6 +38,8 @@ function EventMetaPill({ label, value, valueClassName }: EventMetaPillProps) {
 export function EventCard({ event }: EventCardProps) {
   return (
     <article className="app-card space-y-5">
+      <EventThumbnail league={event.league} title={event.title} venue={event.venue} />
+
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1.5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">{event.league}</p>
@@ -62,10 +65,7 @@ export function EventCard({ event }: EventCardProps) {
         <p className="text-sm font-medium text-zinc-600">
           Vibe <span className="font-semibold text-zinc-900">{formatVibe(event.vibe)}</span>
         </p>
-        <Link
-          href={`/events/${event.id}`}
-          className="app-button-primary"
-        >
+        <Link href={`/events/${event.id}`} className="app-button-primary">
           View details
         </Link>
       </div>

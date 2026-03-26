@@ -1,3 +1,4 @@
+import { AvatarPlaceholder } from "@/components/AvatarPlaceholder";
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { getChatThreadById, getEventById, profiles, starterChats } from "@/lib/mock-data";
@@ -45,6 +46,7 @@ export default async function ChatPage({
           description="That conversation does not exist yet. Start from your matches to open an available chat preview."
           actionHref="/matches"
           actionLabel="Back to matches"
+          icon="💬"
         />
       </>
     );
@@ -62,6 +64,7 @@ export default async function ChatPage({
           description="This match exists, but its thread has not been initialized. Try another match preview."
           actionHref="/matches"
           actionLabel="Back to matches"
+          icon="🗂️"
         />
       </>
     );
@@ -77,7 +80,7 @@ export default async function ChatPage({
       />
 
       <section className="space-y-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
-        <div className="rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm">
+        <div className="app-card !p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Date plan</p>
           <h2 className="mt-2 text-lg font-semibold text-zinc-900">{event?.title ?? "Upcoming event"}</h2>
           <p className="mt-1 text-sm text-zinc-600">
@@ -89,32 +92,39 @@ export default async function ChatPage({
           <p className="px-1 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Thread</p>
           {thread.messages.map((message) => {
             const sender = profiles.find((profile) => profile.id === message.sender_profile_id);
-            const isCounterpart = sender?.first_name === chat.name;
+            const senderName = sender?.first_name ?? "Match";
+            const isCounterpart = senderName === chat.name;
 
             return (
-              <article
+              <div
                 key={message.id}
-                className={`max-w-[88%] space-y-1 rounded-2xl p-3 ${
-                  isCounterpart
-                    ? "mr-auto bg-white text-zinc-900 shadow-sm"
-                    : "ml-auto bg-zinc-900 text-white"
-                }`}
+                className={`flex items-end gap-2 ${isCounterpart ? "justify-start" : "justify-end"}`}
               >
-                <div className="flex items-center justify-between gap-3 text-[11px]">
-                  <span className={`font-medium ${isCounterpart ? "text-zinc-500" : "text-zinc-300"}`}>
-                    {sender?.first_name ?? "Match"}
-                  </span>
-                  <time className={isCounterpart ? "text-zinc-400" : "text-zinc-300"}>
-                    {formatMessageTime(message.sent_at)}
-                  </time>
-                </div>
-                <p className="text-sm leading-6">{message.text}</p>
-              </article>
+                {isCounterpart ? <AvatarPlaceholder name={senderName} sizeClassName="h-9 w-9" textClassName="text-sm" /> : null}
+                <article
+                  className={`max-w-[82%] space-y-1 rounded-2xl p-3 ${
+                    isCounterpart
+                      ? "mr-auto bg-white text-zinc-900 shadow-sm"
+                      : "ml-auto bg-zinc-900 text-white"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3 text-[11px]">
+                    <span className={`font-medium ${isCounterpart ? "text-zinc-500" : "text-zinc-300"}`}>
+                      {senderName}
+                    </span>
+                    <time className={isCounterpart ? "text-zinc-400" : "text-zinc-300"}>
+                      {formatMessageTime(message.sent_at)}
+                    </time>
+                  </div>
+                  <p className="text-sm leading-6">{message.text}</p>
+                </article>
+                {!isCounterpart ? <AvatarPlaceholder name="You" sizeClassName="h-9 w-9" textClassName="text-sm" /> : null}
+              </div>
             );
           })}
         </div>
 
-        <div className="rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm">
+        <div className="app-card !p-4">
           <h3 className="text-sm font-semibold text-zinc-900">Quick plan prompts</h3>
           <p className="mt-1 text-xs text-zinc-600">Tap a prompt to steer toward concrete game-day logistics.</p>
           <div className="mt-3 grid gap-2">
@@ -132,7 +142,7 @@ export default async function ChatPage({
           </div>
         </div>
 
-        <div className="rounded-3xl border border-zinc-200 bg-white p-3 shadow-sm">
+        <div className="app-card !p-3">
           <label htmlFor="message-draft" className="sr-only">
             Draft message
           </label>

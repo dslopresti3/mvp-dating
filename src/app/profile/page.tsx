@@ -1,3 +1,4 @@
+import { AvatarPlaceholder } from "@/components/AvatarPlaceholder";
 import { PageHeader } from "@/components/PageHeader";
 import { ProfilePreferenceBlock } from "@/components/ProfilePreferenceBlock";
 import { events, profiles } from "@/lib/mock-data";
@@ -37,12 +38,12 @@ export default function ProfilePage() {
 
       <section className="app-card space-y-4">
         <div className="flex items-start gap-4">
-          <div
-            className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-zinc-100 text-xl font-semibold text-zinc-700"
-            aria-label="Profile image placeholder"
-          >
-            {selectedProfile.first_name.charAt(0)}
-          </div>
+          <AvatarPlaceholder
+            name={selectedProfile.first_name}
+            sizeClassName="h-16 w-16"
+            textClassName="text-xl"
+            shape="rounded"
+          />
 
           <div className="min-w-0 flex-1 space-y-2">
             <h2 className="text-xl font-semibold tracking-tight text-zinc-900">
