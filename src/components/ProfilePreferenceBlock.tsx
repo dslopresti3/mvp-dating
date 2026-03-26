@@ -13,7 +13,7 @@ export function ProfilePreferenceBlock({
 }: ProfilePreferenceBlockProps) {
   return (
     <section className="app-card space-y-3">
-      <div className="space-y-1.5">
+      <div className="app-section-heading">
         <h2 className="text-base font-semibold tracking-tight text-zinc-900">{title}</h2>
         {description ? <p className="text-sm leading-6 text-zinc-600">{description}</p> : null}
       </div>

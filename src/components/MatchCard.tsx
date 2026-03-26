@@ -45,7 +45,7 @@ export function MatchCard({
   return (
     <article className="app-card space-y-5">
       <div className="app-surface">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">Event match</p>
+        <p className="app-eyebrow">Event match</p>
         <p className="mt-1 text-[15px] font-semibold text-zinc-900">{eventTitle}</p>
         <p className="mt-1 text-sm text-zinc-600">
           {formatEventDate(eventDate)} · {eventTime} · {eventVenue}
@@ -76,14 +76,14 @@ export function MatchCard({
       <div className="grid grid-cols-3 gap-2.5">
         <button
           type="button"
-          className="min-h-12 rounded-full border border-zinc-200 px-3 py-2.5 text-sm font-semibold text-zinc-700"
+          className="app-button-secondary-muted"
           aria-label={`Pass on ${name}`}
         >
           Pass
         </button>
         <button
           type="button"
-          className="min-h-12 rounded-full bg-zinc-900 px-3 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-zinc-400"
+          className="app-button-primary px-3 disabled:cursor-not-allowed disabled:bg-zinc-400"
           disabled={!canMatch || isMatching}
           onClick={() => onMatch(profileId)}
           aria-label={canMatch ? `Match with ${name}` : `${name} has no chat thread yet`}
@@ -92,7 +92,7 @@ export function MatchCard({
         </button>
         <button
           type="button"
-          className="min-h-12 rounded-full border border-zinc-200 px-3 py-2.5 text-sm font-semibold text-zinc-700"
+          className="app-button-secondary-muted"
           aria-label={`Save ${name} for later`}
         >
           Save

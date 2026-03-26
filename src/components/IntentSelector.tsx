@@ -1,6 +1,6 @@
 'use client';
 
-type IntentOption = {
+export type IntentOption = {
   value: string;
   label: string;
   description: string;
@@ -8,17 +8,24 @@ type IntentOption = {
 
 type IntentSelectorProps = {
   title: string;
+  description?: string;
   options: IntentOption[];
   selectedValue: string;
   onSelect: (value: string) => void;
 };
 
-export function IntentSelector({ title, options, selectedValue, onSelect }: IntentSelectorProps) {
+export function IntentSelector({
+  title,
+  description = "Choose one so matching can prioritize the right people.",
+  options,
+  selectedValue,
+  onSelect,
+}: IntentSelectorProps) {
   return (
     <section className="space-y-3.5" aria-label={title}>
       <div className="space-y-1">
         <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-800">{title}</h2>
-        <p className="text-sm text-zinc-600">Choose one so matching can prioritize the right people.</p>
+        <p className="text-sm text-zinc-600">{description}</p>
       </div>
       <ul className="space-y-2.5">
         {options.map((option) => {
@@ -31,10 +38,8 @@ export function IntentSelector({ title, options, selectedValue, onSelect }: Inte
                 onClick={() => onSelect(option.value)}
                 aria-pressed={isSelected}
                 className={[
-                  "w-full rounded-2xl border p-4 text-left transition-all duration-150",
-                  isSelected
-                    ? "border-zinc-900 bg-zinc-900 text-white shadow-[0_8px_20px_rgba(24,24,27,0.24)]"
-                    : "border-zinc-200 bg-white text-zinc-900 hover:border-zinc-300",
+                  "app-choice-card",
+                  isSelected ? "app-choice-card-active" : "text-zinc-900",
                 ].join(" ")}
               >
                 <div className="flex items-center justify-between gap-3">

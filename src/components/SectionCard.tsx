@@ -18,7 +18,7 @@ export function SectionCard({
 }: SectionCardProps) {
   return (
     <section className="app-card space-y-4">
-      <div className="space-y-1.5 border-b border-zinc-100 pb-3">
+      <div className="app-section-heading border-b border-zinc-100 pb-3">
         <h2 className="text-lg font-semibold tracking-tight text-zinc-900">{title}</h2>
         {description ? <p className="text-sm leading-6 text-zinc-600">{description}</p> : null}
       </div>
