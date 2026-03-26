@@ -1,170 +1,115 @@
-# Stadium Date MVP
+# Stadium Date (MVP)
 
-Stadium Date is an **event-first dating app**: users pick a live event first, then discover compatible people who want to attend that same event.
+Stadium Date is an **event-first dating app**: users choose a live event first, then discover compatible people who want to attend that same event.
 
-Instead of starting with endless profile swiping, the product starts with a shared plan in the real world — a game night in New York.
+This repository is the MVP build focused on **New York sports** as the launch wedge.
 
----
+## Product concept
 
-## Product Concept
+Most dating products start with profile swiping. Stadium Date starts with a plan:
 
-Stadium Date is designed around one core belief:
+1. Pick an event
+2. Set ticket/date intent
+3. View compatible people for that exact event
+4. Continue in a lightweight chat preview
 
-> Dates are easier to start when both people already want to be at the same place.
+The goal is simple: make connections easier by anchoring matches to a real-world night out.
 
-For this MVP, users can:
+## Why event-first
 
-1. Choose a city (New York City in v1)
-2. Browse live sports events
-3. Pick an event and set their ticket/date intent
-4. View compatible people for that exact event
-5. Open a mocked chat preview from a match
+Event-first matching creates immediate shared context:
 
-This creates a clear, low-friction flow from **interest → plan → connection**.
+- Both people already chose the same event
+- Conversation starts with a real plan (teams, venue, vibe)
+- Ticket intent helps align expectations early
+- Matches are more actionable than generic profile likes
 
----
+## MVP launch wedge: New York sports
 
-## Why Event-First
+The MVP focuses on NYC-area sports events to validate core behavior in one dense market before broad expansion.
 
-Traditional dating products often optimize for profile browsing before context exists.
+Why New York sports for v1:
 
-Stadium Date flips that model:
+- High event supply across leagues and venues
+- Strong fan identity and built-in conversation topics
+- Range of price points and date styles
 
-- **Shared context first**: both people selected the same live event
-- **Better conversation starters**: the event, teams, venue, and vibe create natural topics
-- **More actionable matching**: intent (have tickets, buying tickets, exploring) helps align expectations
-- **Stronger real-world outcomes**: every match is anchored to a specific night out
+Current mock events cover multiple NYC teams/leagues as sample inventory.
 
-Event-first helps reduce the ambiguity of “what do we even do?” and makes planning feel immediate.
+## Route overview
 
----
+Built with the Next.js App Router:
 
-## MVP Launch Wedge: New York Sports
+- `/` — home and entry framing
+- `/discover` — event feed + filters
+- `/events/[id]` — event details + decision panel
+- `/matches` — compatible people for selected event
+- `/chat/[id]` — mocked chat thread
+- `/profile` — event preference profile
 
-The initial launch wedge is **New York sports events** across multiple leagues.
+## Reusable component overview
 
-This wedge works because it combines:
+Core UI components live in `src/components` and are designed for mobile-first reuse:
 
-- Dense local event supply
-- Strong team identities and fan communities
-- A wide ticket-price spectrum (affordable to premium)
-- Natural variety in date vibes (chill, loud, high-energy, premium)
+- **Layout/navigation:** `PageHeader`, `BottomNav`, `SectionCard`
+- **Discovery/events:** `EventCard`, `EventThumbnail`, `EventQuickFacts`, `FilterChip`, `ChipList`, `EventDecisionPanel`, `IntentSelector`
+- **Matching/chat/profile:** `MatchesClient`, `MatchCard`, `ChatBubble`, `ProfilePreferenceBlock`, `AvatarPlaceholder`, `EmptyState`
 
-Current seeded leagues/events include MLB, NBA, NHL, WNBA, MLS, and PWHL in the NYC metro area.
+## Mock data overview
 
----
+MVP data and lightweight state helpers are in `src/lib`:
 
-## Route Overview
+- `mock-data.ts` — seeded events, profiles, interests, chats, and selectors
+- `mvp-selection.ts` — local selection state (event + intent + date style)
+- `navigation.ts` — bottom-nav config
+- `profile-preferences.ts` — profile preference labels/options
 
-The app uses the Next.js App Router and ships a compact set of core routes:
+The app uses mock data only; there is no production backend in this version.
 
-- `/` — Home onboarding for city + event-type framing
-- `/discover` — Event feed with quick filters
-- `/events/[id]` — Event detail + decision panel (ticket intent + date style)
-- `/matches` — Compatibility results for the selected event
-- `/chat/[id]` — Mocked conversation preview
-- `/profile` — Lightweight profile centered on event preferences
-
----
-
-## Component Structure
-
-UI is organized into reusable, mobile-first building blocks under `src/components`.
-
-### Layout & Navigation
-- `PageHeader` — consistent page-level title/subtitle shell
-- `BottomNav` — persistent navigation for key routes
-- `SectionCard` — reusable content container sections
-
-### Event Discovery & Decisioning
-- `EventCard` — event summary card in discover feed
-- `FilterChip` / `ChipList` — quick selection and tagging UI
-- `EventDecisionPanel` — selection state before entering matches
-- `IntentSelector` — ticket-intent choice block
-
-### Matching & Profile
-- `MatchesClient` — compatibility computation and match listing
-- `MatchCard` — individual candidate presentation
-- `ProfilePreferenceBlock` — reusable profile settings section
-- `EmptyState` — standardized fallback/zero-state UI
-
-This keeps the codebase composable as the app expands beyond sports.
-
----
-
-## Mock Data Overview
-
-All MVP seed data lives in `src/lib` and is intentionally structured for easy replacement with real backend data.
-
-- `src/lib/mock-data.ts`
-  - `events`: NYC sports event inventory
-  - `profiles`: sample user profiles with ticket budgets, vibe preferences, and interested event IDs
-  - `eventInterests`: derived profile↔event relationships
-  - `chatThreads` / `starterChats`: mocked messaging content
-  - selectors/helpers: `getEventById`, `getProfilesForEvent`, etc.
-
-- `src/lib/mvp-selection.ts`
-  - localStorage-backed event/intention/date-style selection state for flow continuity
-
-- `src/lib/navigation.ts`
-  - bottom-nav route definitions
-
-- `src/lib/profile-preferences.ts`
-  - reusable profile preference labels displayed in profile UI
-
----
-
-## Setup Instructions
+## Setup
 
 ### Prerequisites
+
 - Node.js 20+
-- npm (or your preferred package manager)
+- npm
 
 ### Install
+
 ```bash
 npm install
 ```
 
-### Run in development
+### Run locally
+
 ```bash
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open `http://localhost:3000`.
 
-### Production build
+### Build and run production mode
+
 ```bash
 npm run build
 npm run start
 ```
 
 ### Lint
+
 ```bash
 npm run lint
 ```
 
----
+## Future roadmap
 
-## Future Roadmap
+Planned post-MVP expansion:
 
-After validating the NYC sports wedge, Stadium Date expands the event graph and core platform capabilities.
-
-### New event categories
-- Concerts
-- Comedy
-- Festivals
-
-### Platform upgrades
-- Real ticketing integration
-- Authentication
-- Real messaging backend
-
-These steps transition the MVP from a sports-led prototype into a general event-based dating platform.
+- Event categories: **concerts, comedy, festivals**
+- **Real ticketing integration**
+- **Authentication**
+- **Real messaging backend**
+- **City expansion** beyond New York
 
 ---
 
-## Mission Reminder
-
-Stadium Date is not trying to be another swipe-first app.
-
-It is building a premium, mobile-first experience where **the event is the anchor**, and connection follows from shared plans in the real world.
+Stadium Date MVP is intentionally scoped: event-first matching flows, reusable UI, and realistic mock data to validate product direction before full platform build-out.
