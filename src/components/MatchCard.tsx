@@ -5,7 +5,11 @@ type MatchCardProps = {
   name: string;
   age: number;
   bio: string;
-  eventContext: string;
+  eventTitle: string;
+  eventVenue: string;
+  eventDate: string;
+  eventTime: string;
+  eventRelevance: string;
   intentLabel: string;
   vibeAligned: boolean;
   canMatch: boolean;
@@ -13,12 +17,23 @@ type MatchCardProps = {
   onMatch: (profileId: string) => void;
 };
 
+const formatEventDate = (date: string) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
+
 export function MatchCard({
   profileId,
   name,
   age,
   bio,
-  eventContext,
+  eventTitle,
+  eventVenue,
+  eventDate,
+  eventTime,
+  eventRelevance,
   intentLabel,
   vibeAligned,
   canMatch,
@@ -26,22 +41,30 @@ export function MatchCard({
   onMatch,
 }: MatchCardProps) {
   return (
-    <article className="app-card app-section">
-      <div className="flex items-start gap-3">
+    <article className="app-card space-y-5">
+      <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">Event match</p>
+        <p className="mt-1 text-[15px] font-semibold text-zinc-900">{eventTitle}</p>
+        <p className="mt-1 text-sm text-zinc-600">
+          {formatEventDate(eventDate)} · {eventTime} · {eventVenue}
+        </p>
+        <p className="mt-2 text-sm font-medium text-zinc-700">{eventRelevance}</p>
+      </div>
+
+      <div className="flex items-start gap-3.5">
         <div
           className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-lg font-semibold text-zinc-700"
           aria-hidden
         >
           {name.slice(0, 1)}
         </div>
-        <div className="min-w-0 space-y-1">
-          <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
+        <div className="min-w-0 space-y-2">
+          <h2 className="text-xl font-semibold tracking-tight text-zinc-900">
             {name}, {age}
           </h2>
-          <p className="text-sm leading-5 font-medium text-zinc-700">{eventContext}</p>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex rounded-full bg-zinc-900 px-2.5 py-1 text-xs font-semibold text-white">
-              {intentLabel}
+            <span className="inline-flex rounded-full border border-zinc-300 bg-white px-2.5 py-1 text-xs font-semibold text-zinc-700">
+              Intent: {intentLabel}
             </span>
             {vibeAligned ? (
               <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">
@@ -49,31 +72,33 @@ export function MatchCard({
               </span>
             ) : null}
           </div>
+          <p className="text-sm leading-6 text-zinc-600">{bio}</p>
         </div>
       </div>
 
-      <p className="text-sm leading-6 text-zinc-600">{bio}</p>
-
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2.5">
         <button
           type="button"
-          className="min-h-11 rounded-full border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-700"
+          className="min-h-12 rounded-full border border-zinc-200 px-3 py-2.5 text-sm font-semibold text-zinc-700"
+          aria-label={`Pass on ${name}`}
         >
           Pass
         </button>
         <button
           type="button"
-          className="min-h-11 rounded-full bg-zinc-900 px-3 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:bg-zinc-400"
+          className="min-h-12 rounded-full bg-zinc-900 px-3 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-zinc-400"
           disabled={!canMatch || isMatching}
           onClick={() => onMatch(profileId)}
+          aria-label={canMatch ? `Match with ${name}` : `${name} has no chat thread yet`}
         >
-          {isMatching ? "Opening chat..." : canMatch ? "Match" : "No chat yet"}
+          {isMatching ? 'Opening chat...' : canMatch ? 'Match' : 'No chat yet'}
         </button>
         <button
           type="button"
-          className="min-h-11 rounded-full border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-700"
+          className="min-h-12 rounded-full border border-zinc-200 px-3 py-2.5 text-sm font-semibold text-zinc-700"
+          aria-label={`Save ${name} for later`}
         >
-          Save for later
+          Save
         </button>
       </div>
     </article>
