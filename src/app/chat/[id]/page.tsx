@@ -1,7 +1,28 @@
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
-import { SectionCard } from "@/components/SectionCard";
-import { getChatThreadById, starterChats } from "@/lib/mock-data";
+import { getChatThreadById, getEventById, profiles, starterChats } from "@/lib/mock-data";
+
+const quickActionItems = [
+  {
+    label: "Confirm meetup spot",
+    detail: "Lock in a specific entrance and time before doors open.",
+  },
+  {
+    label: "Align ticket budget",
+    detail: "Set a target section and price range before buying.",
+  },
+  {
+    label: "Share transit plan",
+    detail: "Decide trains or rides so arrival stays stress-free.",
+  },
+] as const;
+
+const formatMessageTime = (isoDate: string) =>
+  new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(isoDate));
 
 export default async function ChatPage({
   params,
@@ -46,18 +67,94 @@ export default async function ChatPage({
     );
   }
 
+  const event = getEventById(thread.event_id);
+
   return (
     <>
       <PageHeader
-        title={`Chat with ${chat.name}`}
-        subtitle="Messaging is mocked for now while we scaffold the experience."
+        title={`Plan with ${chat.name}`}
+        subtitle="Move this conversation toward a real event date. Messaging stays mocked for v1."
       />
-      <SectionCard
-        title="Conversation preview"
-        description="A simple placeholder for the eventual real-time chat UI."
-      >
-        <p className="rounded-2xl bg-zinc-100 p-4 text-sm leading-6 text-zinc-700">{chat.teaser}</p>
-      </SectionCard>
+
+      <section className="space-y-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+        <div className="rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Date plan</p>
+          <h2 className="mt-2 text-lg font-semibold text-zinc-900">{event?.title ?? "Upcoming event"}</h2>
+          <p className="mt-1 text-sm text-zinc-600">
+            {event ? `${event.date} • ${event.time} • ${event.venue}` : "Event details unavailable"}
+          </p>
+        </div>
+
+        <div className="space-y-3 rounded-3xl border border-zinc-200 bg-zinc-50 p-3">
+          <p className="px-1 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Thread</p>
+          {thread.messages.map((message) => {
+            const sender = profiles.find((profile) => profile.id === message.sender_profile_id);
+            const isCounterpart = sender?.first_name === chat.name;
+
+            return (
+              <article
+                key={message.id}
+                className={`max-w-[88%] space-y-1 rounded-2xl p-3 ${
+                  isCounterpart
+                    ? "mr-auto bg-white text-zinc-900 shadow-sm"
+                    : "ml-auto bg-zinc-900 text-white"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-3 text-[11px]">
+                  <span className={`font-medium ${isCounterpart ? "text-zinc-500" : "text-zinc-300"}`}>
+                    {sender?.first_name ?? "Match"}
+                  </span>
+                  <time className={isCounterpart ? "text-zinc-400" : "text-zinc-300"}>
+                    {formatMessageTime(message.sent_at)}
+                  </time>
+                </div>
+                <p className="text-sm leading-6">{message.text}</p>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-zinc-900">Quick plan prompts</h3>
+          <p className="mt-1 text-xs text-zinc-600">Tap a prompt to steer toward concrete game-day logistics.</p>
+          <div className="mt-3 grid gap-2">
+            {quickActionItems.map((action) => (
+              <button
+                key={action.label}
+                type="button"
+                className="rounded-2xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-left transition hover:border-zinc-300 hover:bg-zinc-100"
+                aria-label={`${action.label}. ${action.detail}`}
+              >
+                <p className="text-sm font-medium text-zinc-900">{action.label}</p>
+                <p className="mt-0.5 text-xs text-zinc-600">{action.detail}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-zinc-200 bg-white p-3 shadow-sm">
+          <label htmlFor="message-draft" className="sr-only">
+            Draft message
+          </label>
+          <div className="flex items-end gap-2">
+            <textarea
+              id="message-draft"
+              rows={2}
+              placeholder="Suggest timing, entrance, or pre-game stop..."
+              className="min-h-12 flex-1 resize-none rounded-2xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-zinc-400 focus:bg-white focus:outline-none"
+            />
+            <button
+              type="button"
+              className="rounded-2xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
+            >
+              Send
+            </button>
+          </div>
+          <p className="mt-2 text-xs text-zinc-500">
+            Demo only: sending is disabled until the real messaging backend ships.
+          </p>
+        </div>
+      </section>
     </>
   );
 }
