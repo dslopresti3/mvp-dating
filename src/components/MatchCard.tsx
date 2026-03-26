@@ -26,7 +26,7 @@ export function MatchCard({
   onMatch,
 }: MatchCardProps) {
   return (
-    <article className="space-y-4 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
+    <article className="app-card app-section">
       <div className="flex items-start gap-3">
         <div
           className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-lg font-semibold text-zinc-700"
@@ -38,7 +38,7 @@ export function MatchCard({
           <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
             {name}, {age}
           </h2>
-          <p className="text-sm font-medium text-zinc-700">{eventContext}</p>
+          <p className="text-sm leading-5 font-medium text-zinc-700">{eventContext}</p>
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex rounded-full bg-zinc-900 px-2.5 py-1 text-xs font-semibold text-white">
               {intentLabel}
@@ -57,13 +57,13 @@ export function MatchCard({
       <div className="grid grid-cols-3 gap-2">
         <button
           type="button"
-          className="rounded-full border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-700"
+          className="min-h-11 rounded-full border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-700"
         >
           Pass
         </button>
         <button
           type="button"
-          className="rounded-full bg-zinc-900 px-3 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:bg-zinc-400"
+          className="min-h-11 rounded-full bg-zinc-900 px-3 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:bg-zinc-400"
           disabled={!canMatch || isMatching}
           onClick={() => onMatch(profileId)}
         >
@@ -71,7 +71,7 @@ export function MatchCard({
         </button>
         <button
           type="button"
-          className="rounded-full border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-700"
+          className="min-h-11 rounded-full border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-700"
         >
           Save for later
         </button>

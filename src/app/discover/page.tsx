@@ -50,7 +50,7 @@ export default function DiscoverPage() {
         subtitle="Find your event first, then meet someone who wants the same vibe."
       />
 
-      <ul className="flex flex-wrap gap-2" aria-label="Discover filters">
+      <ul className="flex flex-wrap gap-2.5" aria-label="Discover filters">
         {discoverFilters.map((filter) => (
           <li key={filter}>
             <FilterChip
@@ -62,7 +62,7 @@ export default function DiscoverPage() {
         ))}
       </ul>
 
-      <section className="space-y-4 overflow-y-auto pb-2" aria-label="Event feed">
+      <section className="space-y-4 pb-2" aria-label="Event feed">
         {filteredEvents.map((event) => (
           <EventCard key={event.id} event={event} />
         ))}

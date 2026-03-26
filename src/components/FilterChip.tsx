@@ -11,7 +11,7 @@ export function FilterChip({ label, selected, onClick }: FilterChipProps) {
       onClick={onClick}
       aria-pressed={selected}
       className={[
-        "rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
+        "min-h-10 rounded-full border px-3.5 py-2 text-sm font-medium transition-colors",
         selected
           ? "border-zinc-900 bg-zinc-900 text-white"
           : "border-zinc-200 bg-zinc-100 text-zinc-700 hover:bg-zinc-200",

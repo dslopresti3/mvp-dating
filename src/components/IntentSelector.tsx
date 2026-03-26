@@ -16,7 +16,7 @@ type IntentSelectorProps = {
 export function IntentSelector({ title, options, selectedValue, onSelect }: IntentSelectorProps) {
   return (
     <section className="space-y-3" aria-label={title}>
-      <h2 className="text-sm font-semibold tracking-wide text-zinc-800">{title}</h2>
+      <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-zinc-800">{title}</h2>
       <ul className="space-y-2">
         {options.map((option) => {
           const isSelected = selectedValue === option.value;
@@ -34,7 +34,7 @@ export function IntentSelector({ title, options, selectedValue, onSelect }: Inte
                     : "border-zinc-200 bg-white text-zinc-900 hover:border-zinc-300",
                 ].join(" ")}
               >
-                <p className="text-base font-semibold tracking-tight">{option.label}</p>
+                <p className="text-[15px] font-semibold tracking-tight">{option.label}</p>
                 <p className={isSelected ? "mt-1 text-sm text-zinc-200" : "mt-1 text-sm text-zinc-600"}>
                   {option.description}
                 </p>

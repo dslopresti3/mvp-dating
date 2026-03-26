@@ -17,17 +17,14 @@ export function SectionCard({
   children,
 }: SectionCardProps) {
   return (
-    <section className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-      <div className="space-y-1">
+    <section className="app-card space-y-3">
+      <div className="space-y-1.5">
         <h2 className="text-lg font-semibold tracking-tight text-zinc-900">{title}</h2>
-        {description ? <p className="text-sm text-zinc-600">{description}</p> : null}
+        {description ? <p className="text-sm leading-6 text-zinc-600">{description}</p> : null}
       </div>
       {children}
       {href ? (
-        <Link
-          href={href}
-          className="inline-flex rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white"
-        >
+        <Link href={href} className="app-button-primary">
           {ctaLabel}
         </Link>
       ) : null}
