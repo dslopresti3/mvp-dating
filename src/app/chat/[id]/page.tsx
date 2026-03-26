@@ -1,7 +1,7 @@
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { SectionCard } from "@/components/SectionCard";
-import { starterChats } from "@/lib/mock-data";
+import { getChatThreadById, starterChats } from "@/lib/mock-data";
 
 export default async function ChatPage({
   params,
@@ -10,6 +10,7 @@ export default async function ChatPage({
 }) {
   const { id } = await params;
   const chat = starterChats.find((entry) => entry.id === id);
+  const thread = getChatThreadById(id);
 
   if (!chat) {
     return (
@@ -21,6 +22,23 @@ export default async function ChatPage({
         <EmptyState
           title="No chat found"
           description="That conversation does not exist yet. Start from your matches to open an available chat preview."
+          actionHref="/matches"
+          actionLabel="Back to matches"
+        />
+      </>
+    );
+  }
+
+  if (!thread || thread.messages.length === 0) {
+    return (
+      <>
+        <PageHeader
+          title={`Chat with ${chat.name}`}
+          subtitle="Messaging is mocked for now while we scaffold the experience."
+        />
+        <EmptyState
+          title="Chat thread not ready yet"
+          description="This match exists, but its thread has not been initialized. Try another match preview."
           actionHref="/matches"
           actionLabel="Back to matches"
         />
