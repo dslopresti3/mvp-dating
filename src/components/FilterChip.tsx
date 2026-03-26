@@ -11,10 +11,10 @@ export function FilterChip({ label, selected, onClick }: FilterChipProps) {
       onClick={onClick}
       aria-pressed={selected}
       className={[
-        "min-h-10 rounded-full border px-3.5 py-2 text-sm font-medium transition-colors",
+        "inline-flex min-h-11 items-center rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-150",
         selected
-          ? "border-zinc-900 bg-zinc-900 text-white"
-          : "border-zinc-200 bg-zinc-100 text-zinc-700 hover:bg-zinc-200",
+          ? "border-zinc-900 bg-zinc-900 text-white shadow-[0_6px_16px_rgba(24,24,27,0.22)]"
+          : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-100",
       ].join(" ")}
     >
       {label}
