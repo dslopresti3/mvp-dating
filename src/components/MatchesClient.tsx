@@ -180,7 +180,7 @@ export function MatchesClient() {
       )}
 
       {selectedEvent ? (
-        <section className="space-y-4" aria-label="Compatible matches list">
+        <section className="space-y-5" aria-label="Compatible matches list">
           {matchError ? (
             <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
               {matchError}
@@ -199,7 +199,15 @@ export function MatchesClient() {
               profileId={profile.id}
               name={profile.first_name}
               age={profile.age}
-              eventContext={`Also going to ${selectedEvent.title} at ${selectedEvent.venue}`}
+              eventTitle={selectedEvent.title}
+              eventVenue={selectedEvent.venue}
+              eventDate={selectedEvent.date}
+              eventTime={selectedEvent.time}
+              eventRelevance={
+                vibeAligned
+                  ? "Shared event pick + matching crowd vibe"
+                  : "Shared event pick for the same night out"
+              }
               bio={profile.bio}
               intentLabel={intentLabels[profile.intent]}
               vibeAligned={vibeAligned}
