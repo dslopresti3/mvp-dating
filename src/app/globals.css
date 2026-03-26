@@ -3,6 +3,7 @@
 :root {
   --background: #fafafa;
   --foreground: #18181b;
+  --bottom-nav-height: 5.5rem;
 }
 
 @theme inline {
@@ -52,15 +53,15 @@ body {
   }
 
   .app-button-primary {
-    @apply inline-flex min-h-11 items-center justify-center rounded-full bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800;
+    @apply inline-flex min-h-12 items-center justify-center rounded-full bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800;
   }
 
   .app-button-secondary {
-    @apply inline-flex min-h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50;
+    @apply inline-flex min-h-12 items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50;
   }
 
   .app-button-secondary-muted {
-    @apply inline-flex min-h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-100;
+    @apply inline-flex min-h-12 items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-100;
   }
 
   .app-choice-card {

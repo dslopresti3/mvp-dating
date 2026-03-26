@@ -73,17 +73,17 @@ export function MatchCard({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2.5">
+      <div className="grid grid-cols-1 gap-2.5">
         <button
           type="button"
-          className="app-button-secondary-muted"
+          className="app-button-secondary-muted w-full"
           aria-label={`Pass on ${name}`}
         >
           Pass
         </button>
         <button
           type="button"
-          className="app-button-primary px-3 disabled:cursor-not-allowed disabled:bg-zinc-400"
+          className="app-button-primary w-full px-3 disabled:cursor-not-allowed disabled:bg-zinc-400"
           disabled={!canMatch || isMatching}
           onClick={() => onMatch(profileId)}
           aria-label={canMatch ? `Match with ${name}` : `${name} has no chat thread yet`}
@@ -92,7 +92,7 @@ export function MatchCard({
         </button>
         <button
           type="button"
-          className="app-button-secondary-muted"
+          className="app-button-secondary-muted w-full"
           aria-label={`Save ${name} for later`}
         >
           Save

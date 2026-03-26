@@ -16,8 +16,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full bg-zinc-50 font-sans text-zinc-900">
-        <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 px-4 pb-[calc(env(safe-area-inset-bottom)+7.5rem)] pt-[calc(env(safe-area-inset-top)+1rem)]">
+      <body className="min-h-[100dvh] overflow-x-hidden bg-zinc-50 font-sans text-zinc-900">
+        <main className="mx-auto flex min-h-[100dvh] w-full max-w-md flex-col gap-6 px-4 pb-[calc(var(--bottom-nav-height)+env(safe-area-inset-bottom)+1rem)] pt-[calc(env(safe-area-inset-top)+0.875rem)]">
           {children}
         </main>
         <BottomNav />
