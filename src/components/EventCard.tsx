@@ -41,16 +41,16 @@ export function EventCard({ event }: EventCardProps) {
       <EventThumbnail league={event.league} title={event.title} venue={event.venue} />
 
       <div className="flex items-start justify-between gap-3">
-        <div className="app-section-heading">
+        <div className="app-section-heading min-w-0 flex-1">
           <p className="app-eyebrow">{event.league}</p>
           <h2 className="text-xl font-semibold leading-tight tracking-tight text-zinc-900">{event.title}</h2>
         </div>
-        <span className="inline-flex rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
+        <span className="inline-flex shrink-0 rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700">
           {formatVibe(event.vibe)}
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-1 gap-2.5">
         <EventMetaPill label="Date" value={formatEventDate(event.date)} />
         <EventMetaPill label="Time" value={event.time} />
         <EventMetaPill label="Venue" value={event.venue} />
@@ -61,11 +61,11 @@ export function EventCard({ event }: EventCardProps) {
         />
       </div>
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col gap-3">
         <p className="text-sm font-medium text-zinc-600">
           Vibe <span className="font-semibold text-zinc-900">{formatVibe(event.vibe)}</span>
         </p>
-        <Link href={`/events/${event.id}`} className="app-button-primary">
+        <Link href={`/events/${event.id}`} className="app-button-primary w-full">
           View details
         </Link>
       </div>

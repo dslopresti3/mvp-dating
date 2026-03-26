@@ -9,7 +9,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 bg-zinc-50/80 px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2 backdrop-blur">
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-200/70 bg-zinc-50/90 px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2 backdrop-blur supports-[backdrop-filter]:bg-zinc-50/75">
       <ul className="mx-auto grid max-w-md grid-cols-4 gap-2 rounded-2xl border border-zinc-200 bg-white p-2 shadow-[0_6px_24px_rgba(0,0,0,0.08)]" role="list">
         {bottomNavItems.map((item) => {
           const isActive =
@@ -22,7 +22,7 @@ export function BottomNav() {
               <Link
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`flex min-h-12 flex-col items-center justify-center rounded-xl px-2 text-[11px] font-semibold tracking-wide transition-colors ${
+                className={`flex min-h-12 w-full flex-col items-center justify-center rounded-xl px-1.5 text-[11px] font-semibold tracking-wide transition-colors ${
                   isActive
                     ? "bg-zinc-900 text-white"
                     : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"

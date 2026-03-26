@@ -110,7 +110,7 @@ export default function ProfilePage() {
         title="Date planning preferences"
         description="Only the details that matter for choosing and committing to an event date."
       >
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3">
           <article className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5">
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
               Ticket budget
